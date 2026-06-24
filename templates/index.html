@@ -1,0 +1,264 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="hero p-4 rounded mb-4 text-white">
+  <div class="row align-items-center">
+    <div class="col-lg-8">
+      <h1 class="display-6 fw-bold">Predictive Model & Insight Generator</h1>
+      <p class="lead text-muted">Build simple predictive models and extract meaningful insights from your datasets. Support for regression, classification, recommendations and exploratory analysis.</p>
+      <div class="d-flex gap-2 mt-3">
+        <a href="#upload" class="btn btn-lg btn-gradient">Upload Dataset</a>
+        <a href="#insights" class="btn btn-lg btn-outline-light">View Insights</a>
+      </div>
+    </div>
+    <div class="col-lg-4 text-center">
+      <div class="hero-graphic bg-glass p-3 rounded">
+        <i class="bi bi-graph-up display-1 text-cyan"></i>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="mb-4">
+  <div class="row g-3">
+    <div class="col-sm-6 col-lg-3">
+      <div class="card glass-card h-100 hover-lift">
+        <div class="card-body">
+          <h6 class="card-title">Regression</h6>
+          <p class="small text-muted">Predict continuous outcomes with linear and tree-based models.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+      <div class="card glass-card h-100 hover-lift">
+        <div class="card-body">
+          <h6 class="card-title">Classification</h6>
+          <p class="small text-muted">Binary or multi-class classification workflows and evaluation.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+      <div class="card glass-card h-100 hover-lift">
+        <div class="card-body">
+          <h6 class="card-title">Recommendation</h6>
+          <p class="small text-muted">Generate user/item recommendations from interaction data.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+      <div class="card glass-card h-100 hover-lift">
+        <div class="card-body">
+          <h6 class="card-title">Data Insights</h6>
+          <p class="small text-muted">Automatic EDA, trends, outliers and feature importance.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="upload" class="mb-4">
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="card glass-card hover-lift">
+        <div class="card-body">
+          <h5 class="card-title">Upload Dataset</h5>
+          <p class="small text-muted">Supported: CSV files. Max size depends on server configuration.</p>
+          <form action="/upload" method="post" enctype="multipart/form-data">
+            <div id="dropArea" class="drop-area rounded mb-3">
+              <input id="datasetFile" name="dataset" type="file" accept=".csv" class="form-control-file" />
+              <div class="drop-inner text-center">
+                <i class="bi bi-cloud-arrow-up display-4 text-cyan"></i>
+                <p class="mb-0 mt-2">Drag & drop CSV here or click to browse</p>
+                <small class="text-muted">Only CSV format supported</small>
+              </div>
+            </div>
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-gradient">Upload</button>
+              <a href="#" class="btn btn-outline-light">Example CSV</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card glass-card hover-lift">
+        <div class="card-body">
+          <h5 class="card-title">Dataset Overview</h5>
+          <div class="row text-muted small">
+            <div class="col-6 mb-2">Total rows: <strong class="text-white">{{ totals.rows or '—' }}</strong></div>
+            <div class="col-6 mb-2">Total columns: <strong class="text-white">{{ totals.columns or '—' }}</strong></div>
+            <div class="col-6 mb-2">Missing values: <strong class="text-white">{{ totals.missing or '—' }}</strong></div>
+            <div class="col-6 mb-2">Duplicate records: <strong class="text-white">{{ totals.duplicates or '—' }}</strong></div>
+            <div class="col-12 mt-3">
+              <h6 class="small">Data types summary</h6>
+              <pre class="small text-muted bg-transparent border-0">{{ totals.dtypes or 'No dataset uploaded yet.' }}</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="models" class="mb-4">
+  <h5 class="mb-3">Model Selection</h5>
+  <div class="row g-3">
+    <div class="col-md-3">
+      <form action="/select_model" method="post">
+        <input type="hidden" name="model_type" value="regression">
+        <div class="card glass-card p-3 hover-lift">
+          <h6>Regression</h6>
+          <p class="small text-muted">Linear Regression, Random Forest Regressor</p>
+          <button class="btn btn-sm btn-outline-light mt-2" type="submit">Select</button>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-3">
+      <form action="/select_model" method="post">
+        <input type="hidden" name="model_type" value="classification">
+        <div class="card glass-card p-3 hover-lift">
+          <h6>Classification</h6>
+          <p class="small text-muted">Logistic Regression, Random Forest Classifier</p>
+          <button class="btn btn-sm btn-outline-light mt-2" type="submit">Select</button>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-3">
+      <form action="/select_model" method="post">
+        <input type="hidden" name="model_type" value="recommendation">
+        <div class="card glass-card p-3 hover-lift">
+          <h6>Recommendation</h6>
+          <p class="small text-muted">Collaborative & content-based options</p>
+          <button class="btn btn-sm btn-outline-light mt-2" type="submit">Select</button>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-3">
+      <form action="/select_model" method="post">
+        <input type="hidden" name="model_type" value="insights">
+        <div class="card glass-card p-3 hover-lift">
+          <h6>Data Insights</h6>
+          <p class="small text-muted">Automatic EDA, trends, outliers, importance</p>
+          <button class="btn btn-sm btn-outline-light mt-2" type="submit">Select</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section id="predict" class="mb-4">
+  <h5 class="mb-3">Prediction Input</h5>
+  <div class="card glass-card p-3">
+    <form action="/predict" method="post">
+      <div class="row g-3" id="predictInputs">
+        {% for field in predict_fields or [] %}
+        <div class="col-md-3">
+          <label class="form-label text-muted">{{ field }}</label>
+          <input name="{{ field }}" class="form-control form-control-dark" placeholder="Enter {{ field }}">
+        </div>
+        {% endfor %}
+      </div>
+      <div class="mt-3 d-flex gap-2">
+        <button class="btn btn-gradient" type="submit">Predict</button>
+        <a class="btn btn-outline-light" href="/clear">Clear</a>
+      </div>
+    </form>
+  </div>
+  <div class="mt-3">
+    <div class="card glass-card p-3">
+      <h6>Predicted Output</h6>
+      <div class="result-card p-3 rounded bg-transparent border-0">{{ prediction or 'No prediction yet.' }}</div>
+    </div>
+  </div>
+</section>
+
+<section id="insights" class="mb-4">
+  <h5 class="mb-3">Insights Dashboard</h5>
+  <div class="row g-3">
+    <div class="col-lg-6">
+      <div class="card glass-card p-3 hover-lift">
+        <h6>Charts</h6>
+        <div class="p-2">
+          {% if session.get('totals') %}
+            <div class="row g-2">
+              <div class="col-12 mb-2">
+                <img src="{{ url_for('chart', name='corr') }}" class="img-fluid rounded" alt="Correlation heatmap">
+              </div>
+              <div class="col-md-6 mb-2">
+                <img src="{{ url_for('chart', name='hist') }}" class="img-fluid rounded" alt="Histograms">
+              </div>
+              <div class="col-md-6 mb-2">
+                <img src="{{ url_for('chart', name='trend') }}" class="img-fluid rounded" alt="Trend">
+              </div>
+            </div>
+          {% else %}
+            <div class="placeholder-glass p-4 text-center">Upload a CSV to generate charts</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card glass-card p-3 hover-lift mb-3">
+        <h6>Accuracy / Score</h6>
+        <div class="d-flex align-items-center justify-content-between">
+          <div>
+            <h3 class="mb-0">{{ metrics.score or '—' }}</h3>
+            <small class="text-muted">Model score</small>
+          </div>
+          <div class="progress w-50" style="height:10px">
+            <div class="progress-bar bg-cyan" role="progressbar" data-score="{{ (metrics.score|default(0))*100 }}"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card glass-card p-3 hover-lift mb-3">
+        <h6>Feature Importance</h6>
+        <div class="small text-muted">
+          {% if results.insights %}
+            <ul class="list-unstyled mb-0">
+              {% for k,v in results.insights.items() %}
+                <li><strong class="text-white">{{ k }}</strong>: <span class="text-muted">{{ v }}</span></li>
+              {% endfor %}
+            </ul>
+          {% elif metrics.feature_importance %}
+            <pre class="small text-muted bg-transparent border-0">{{ metrics.feature_importance }}</pre>
+          {% else %}
+            Not available
+          {% endif %}
+        </div>
+      </div>
+      <div class="card glass-card p-3 hover-lift">
+        <h6>Trend Analysis</h6>
+        <div class="small text-muted">Seasonality, moving averages and trend lines</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Apply score widths from data attributes to avoid template/CSS parse issues
+  (function(){
+    document.querySelectorAll('.progress-bar[data-score]').forEach(el=>{
+      const v = Number(el.getAttribute('data-score')||0);
+      const pct = isNaN(v)?0:Math.max(0, Math.min(100, Math.round(v)));
+      el.style.width = pct + '%';
+      el.setAttribute('aria-valuenow', pct);
+    });
+  })();
+</script>
+
+<section id="results" class="mb-4">
+  <h5 class="mb-3">Results</h5>
+  <div class="card glass-card p-3">
+    <div class="row">
+      <div class="col-md-8">
+        <h6>Model Performance</h6>
+        <pre class="small text-muted bg-transparent border-0">{{ results.performance or 'No model run yet.' }}</pre>
+      </div>
+      <div class="col-md-4 text-end">
+        <a href="/download_report" class="btn btn-gradient">Download Report</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card glass-card p-4">
+      <h4 class="mb-3">Sign In</h4>
+      <form method="post" action="/login">
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input class="form-control form-control-dark" name="email" placeholder="you@example.com" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-control form-control-dark" name="password" placeholder="Password" required>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-gradient" type="submit">Sign in</button>
+          <a href="/" class="btn btn-outline-light">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
