@@ -21,4 +21,3 @@ set FLASK_RUN_HOST=0.0.0.0
 set PORT=5000
 set FLASK_DEBUG=0
 python app.py
-```
